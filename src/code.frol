@@ -1,0 +1,9 @@
+Int x, y;
+
+Begin
+    x := 5;
+    y := 3;
+    Int result;
+    result := (x + 5) / 2;
+    Write result;
+End

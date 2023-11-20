@@ -1,0 +1,74 @@
+{
+    "declarations": [
+        {
+            "type": "INT",
+            "variables": [
+                {
+                    "name": "x"
+                },
+                {
+                    "name": "y"
+                }
+            ]
+        }
+    ],
+    "statements": [
+        {
+            "identifier": {
+                "name": "x"
+            },
+            "expression": {
+                "value": "5"
+            }
+        },
+        {
+            "identifier": {
+                "name": "y"
+            },
+            "expression": {
+                "value": "3"
+            }
+        },
+        {
+            "type": "INT",
+            "variables": [
+                {
+                    "name": "result"
+                }
+            ]
+        },
+        {
+            "identifier": {
+                "name": "result"
+            },
+            "expression": {
+                "operator": "DIVISION_OPERATOR",
+                "left": {
+                    "expression": {
+                        "operator": "PLUS_OPERATOR",
+                        "left": {
+                            "name": "x"
+                        },
+                        "right": {
+                            "value": "5"
+                        }
+                    }
+                },
+                "right": {
+                    "operator": "MINUS_OPERATOR",
+                    "operand": {
+                        "value": "2"
+                    }
+                }
+            }
+        },
+        {
+            "expression": {
+                "operator": "WRITE",
+                "operand": {
+                    "name": "result"
+                }
+            }
+        }
+    ]
+}
