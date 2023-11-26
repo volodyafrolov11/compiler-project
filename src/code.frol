@@ -4,6 +4,6 @@ Begin
     x := 5;
     y := 3;
     Int result;
-    result := (x + 5) / 2;
+    result := (x + y) / 2;
     Write result;
 End

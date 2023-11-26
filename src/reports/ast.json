@@ -1,7 +1,6 @@
 {
     "declarations": [
         {
-            "type": "INT",
             "variables": [
                 {
                     "name": "x"
@@ -30,7 +29,6 @@
             }
         },
         {
-            "type": "INT",
             "variables": [
                 {
                     "name": "result"
@@ -50,15 +48,12 @@
                             "name": "x"
                         },
                         "right": {
-                            "value": "5"
+                            "name": "y"
                         }
                     }
                 },
                 "right": {
-                    "operator": "MINUS_OPERATOR",
-                    "operand": {
-                        "value": "2"
-                    }
+                    "value": "2"
                 }
             }
         },

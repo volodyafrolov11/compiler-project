@@ -12,7 +12,6 @@ import {TokenTypeName} from "../Token/TokenType";
 export class Parser {
     private tokens: Token[];
     private currentTokenIndex: number = 0;
-    private scope: Record<string, number> = {} // ключ - название переменнойй, значение - number
 
     constructor(tokens: Token[]) {
         this.tokens = tokens;
@@ -36,13 +35,7 @@ export class Parser {
         this.match("INT");
         const variables = this.parseIdentifierList();
         this.match("SEMICOLON");
-
-        // Инициализируем переменные значением по умолчанию (нуль)
-        variables.forEach(variable => {
-            this.scope[variable.name] = 0;
-        });
-
-        return new VariableDeclarationNode("INT", variables);
+        return new VariableDeclarationNode(variables);
     }
 
     private parseIdentifierList(): IdentifierNode[] {
@@ -61,7 +54,6 @@ export class Parser {
         return new IdentifierNode(currentToken.text);
     }
 
-    // TODO Сделать обработку End
     private parseStatements(): StatementNode[] {
         const statements: StatementNode[] = [];
         this.match("BEGIN");
@@ -98,7 +90,6 @@ export class Parser {
         this.match("ASSIGN_OPERATOR");
         const expression = this.parseExpression();
         this.match("SEMICOLON");
-        this.scope[identifier.name] = this.evaluateExpression(expression);
         return new AssignmentNode(identifier, expression);
     }
 
@@ -150,48 +141,6 @@ export class Parser {
         const currentToken = this.getCurrentToken();
         this.match("NUMBER");
         return new ConstantNode(currentToken.text);
-    }
-
-    private evaluateExpression(expression: ExpressionNode): number {
-        if(expression instanceof ConstantNode) {
-            return parseInt(expression.value, 10);
-        } else if(expression instanceof IdentifierNode) {
-            const value =this.scope[expression.name];
-            if(value !== undefined) {
-                return value;
-            } else {
-                throw new Error(`Переменная ${expression.name} не определена!`);
-            }
-        } else if(expression instanceof UnaryExpressionNode) {
-            const operandValue = this.evaluateExpression(expression.operand);
-            if(expression.operator === "MINUS_OPERATOR") {
-                return -operandValue;
-            } else {
-                throw new Error(`Неожиданный унарный оператор: ${expression.operator}`);
-            }
-        } else if(expression instanceof BinaryExpressionNode) {
-            const leftValue = this.evaluateExpression(expression.left);
-            const rightValue = this.evaluateExpression(expression.right);
-            if(expression.operator === "PLUS_OPERATOR") {
-                return leftValue + rightValue;
-            } else if(expression.operator === "MINUS_OPERATOR") {
-                return leftValue - rightValue;
-            } else if(expression.operator === "MULTIPLY_OPERATOR") {
-                return leftValue * rightValue;
-            } else if(expression.operator === "DIVISION_OPERATOR") {
-                if(rightValue !== 0) {
-                    return leftValue / rightValue;
-                } else {
-                    throw new Error(`Деление на ноль запрещено!`);
-                }
-            } else {
-                throw new Error(`Неожиданный бинарный оператор: ${expression.operator}`);
-            }
-        } else if(expression instanceof ParenthesizedExpressionNode) {
-            return this.evaluateExpression(expression.expression);
-        } else {
-            throw new Error(`Неожиданное выражение: ${expression}`);
-        }
     }
 
     private getCurrentToken(): Token {
